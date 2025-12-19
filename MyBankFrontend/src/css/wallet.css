@@ -1,0 +1,87 @@
+
+.wallet-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f5f5f5;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+
+.wallet-card {
+  background: #ffffff;
+  width: 360px;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
+}
+
+
+.wallet-card h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #111;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.wallet-message {
+  text-align: center;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.wallet-message.success {
+  color: #1a7f37;
+}
+
+.wallet-message.error {
+  color: #d1242f;
+}
+
+
+.wallet-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.wallet-form input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  font-size: 14px;
+  outline: none;
+}
+
+.wallet-form input:focus {
+  border-color: #111;
+}
+
+
+.wallet-form button {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #111;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.wallet-form button:hover {
+  background: #000;
+}
+
+
+.withdraw-btn {
+  background: #222;
+}
+
+.withdraw-btn:hover {
+  background: #000;
+}
