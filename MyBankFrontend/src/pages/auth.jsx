@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../assets/api";
 import { useNavigate } from "react-router-dom";
 
-export default function Auth({ onLogin }) {   // 👈 FIX 1: accept onLogin
+export default function Auth({ onLogin }) {  
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,7 +20,7 @@ export default function Auth({ onLogin }) {   // 👈 FIX 1: accept onLogin
       const token = res.data;
       localStorage.setItem("token", token);
 
-      onLogin();              // 👈 FIX 2: tell App “user is logged in”
+      onLogin();              
       navigate("/");
 
       alert("Login successfully");
