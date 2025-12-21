@@ -2,7 +2,7 @@ import { useState } from "react";
 import api from "../assets/api";
 import { useNavigate } from "react-router-dom";
 
-export default function Auth({ onLogin }) {  
+export default function Auth({ onLogin }) {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,10 +20,13 @@ export default function Auth({ onLogin }) {
       const token = res.data;
       localStorage.setItem("token", token);
 
-      onLogin();              
-      navigate("/");
+      // ✅ SAFE CALL
+      if (typeof onLogin === "function") {
+        onLogin();
+      }
 
-      alert("Login successfully");
+      navigate("/");
+      alert("Login successful");
     } catch (err) {
       alert("Login failed");
       console.error(err);
@@ -34,18 +37,16 @@ export default function Auth({ onLogin }) {
     e.preventDefault();
 
     try {
-      const res = await api.post("/auth/signup", {
+      // 🔹 signup usually DOES NOT return a token
+      await api.post("/auth/signup", {
         email,
         password,
       });
 
-      const token = res.data;
-      localStorage.setItem("token", token);
-
-      onLogin();             
-      navigate("/");
-
-      alert("Signup successful");
+      alert("Signup successful. Please login.");
+      setIsLogin(true);
+      setEmail("");
+      setPassword("");
     } catch (err) {
       alert("Signup failed");
       console.error(err);
@@ -64,6 +65,7 @@ export default function Auth({ onLogin }) {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+
         <br /><br />
 
         <input
@@ -73,6 +75,7 @@ export default function Auth({ onLogin }) {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+
         <br /><br />
 
         <button type="submit">
@@ -82,7 +85,13 @@ export default function Auth({ onLogin }) {
 
       <br />
 
-      <button onClick={() => setIsLogin(!isLogin)}>
+      <button
+        onClick={() => {
+          setIsLogin(!isLogin);
+          setEmail("");
+          setPassword("");
+        }}
+      >
         {isLogin
           ? "Need an account? Sign up"
           : "Already have an account? Login"}
