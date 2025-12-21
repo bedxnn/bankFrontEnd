@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 export default function Navbar() {
+  const token = localStorage.getItem("token");
+  if(!token ) return null;
   return (
     <nav className = "nav">
         <Link to ="/" className="site-title"> Dashboard</Link>
