@@ -1,83 +1,92 @@
-import {useState} from "react";
+import { useState } from "react";
 import api from "../assets/api";
 import { useNavigate } from "react-router-dom";
 
+export default function Auth({ onLogin }) {   // 👈 FIX 1: accept onLogin
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-export default function Auth(){
-    const[isLogin, setIsLogin] = useState(true);
-    const[email, setEmail] = useState("");
-    const[password, setPassword] = useState("");
-    const navigate = useNavigate();
+  const handleLogin = async (e) => {
+    e.preventDefault();
 
-    const handleLogin = async (e) =>{
-        e.preventDefault();
+    try {
+      const res = await api.post("/auth/login", {
+        email,
+        password,
+      });
 
-        try{
-            const res = await api.post(
-                "/auth/login",{
-                    email,password,
-                });
-                           
-            const token = res.data;
-            localStorage.setItem("token",token);
-            navigate("/")
+      const token = res.data;
+      localStorage.setItem("token", token);
 
-            alert("Login succesfully");
-        }catch(err){
-            alert("Login failed");
-            console.error(err);
-        }
-    };
+      onLogin();              // 👈 FIX 2: tell App “user is logged in”
+      navigate("/");
 
-    const handleSignup = async (e) =>{
-        e.preventDefault();
+      alert("Login successfully");
+    } catch (err) {
+      alert("Login failed");
+      console.error(err);
+    }
+  };
 
-        try{
-            await api.post("/auth/signup",{
-                email,
-                password,
-            });
-            alert("Signup succesful");
-            setIsLogin(true);
-        }catch(err){
-            alert("signup failed");
-            console.error(err);
-        }
-    };
-    return(
-        <div className = "box">
-            <h2>{isLogin? "Login": "Sign up"}</h2>
+  const handleSignup = async (e) => {
+    e.preventDefault();
 
-            <form onSubmit = {isLogin ? handleLogin: handleSignup}>
-                <input 
-                type = "email"
-                placeholder="email"
-                value = {email}
-                onChange={(e) => setEmail(e.target.value)}
-                required/>
-                <br /><br/>
-                <input 
-                type = "password"
-                placeholder="password"
-                value = {password}
-                onChange={(e) => setPassword(e.target.value)}
-                required/>
-                <br /><br/>
+    try {
+      const res = await api.post("/auth/signup", {
+        email,
+        password,
+      });
 
+      const token = res.data;
+      localStorage.setItem("token", token);
 
-                <button type ="submit">
-                    {isLogin ? "Login" : "Sign Up"}
-                </button>
-                </form>
-                <br/>
+      onLogin();             
+      navigate("/");
 
-            <button onClick ={()=> setIsLogin(!isLogin)}>
-                {isLogin ? "Need an account? Sign up": "Already have an account ? Login"}
-            </button>
-         </div>
+      alert("Signup successful");
+    } catch (err) {
+      alert("Signup failed");
+      console.error(err);
+    }
+  };
 
-     
+  return (
+    <div className="box">
+      <h2>{isLogin ? "Login" : "Sign up"}</h2>
 
-    )
-    
+      <form onSubmit={isLogin ? handleLogin : handleSignup}>
+        <input
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <br /><br />
+
+        <input
+          type="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <br /><br />
+
+        <button type="submit">
+          {isLogin ? "Login" : "Sign Up"}
+        </button>
+      </form>
+
+      <br />
+
+      <button onClick={() => setIsLogin(!isLogin)}>
+        {isLogin
+          ? "Need an account? Sign up"
+          : "Already have an account? Login"}
+      </button>
+    </div>
+  );
 }
