@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import Navbar from "./pages/Navbar";
 import { Route, Routes } from "react-router-dom";
+
+import Navbar from "./pages/Navbar";
 import Dashboard from "./pages/Dashboard";
 import Account from "./pages/Account";
 import Wallet from "./pages/Wallet";
@@ -23,14 +24,17 @@ function App() {
     setLoading(false);
   }, []);
 
-  if (loading) return null; // ⬅️ prevents flicker / half-render
+  if (loading) return null;
 
   return (
     <>
       {isAuth && <Navbar />}
 
       <Routes>
-        <Route path="/auth" element={<Auth />} />
+        <Route
+          path="/auth"
+          element={<Auth onLogin={() => setIsAuth(true)} />}
+        />
 
         <Route
           path="/"
